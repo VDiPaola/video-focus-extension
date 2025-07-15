@@ -1,11 +1,8 @@
 
-class SettingChangeEvent {
-    constructor(key, oldValue, newValue, isLocal) {
-        this.key = key;
+class SettingChangedEvent{
+    constructor(oldValue, newValue){
         this.oldValue = oldValue;
         this.newValue = newValue;
-        this.isLocal = isLocal;
-        this.timestamp = Date.now();
     }
 }
 
@@ -14,30 +11,27 @@ class Setting{
         this.key = key;
         this.defaultValue = defaultValue;
         this.local = local;
-        this._listeners = new Set();
-    }
+        this._listeners = new Set()
 
-    // Add a listener for this specific setting
-    addChangeListener(callback) {
-        this._listeners.add(callback);
-        return () => this.removeChangeListener(callback); // Return unsubscribe function
-    }
-
-    // Remove a listener for this specific setting
-    removeChangeListener(callback) {
-        this._listeners.delete(callback);
-    }
-
-    // Notify all listeners of a change
-    _notifyListeners(oldValue, newValue) {
-        const event = new SettingChangeEvent(this.key, oldValue, newValue, this.local);
-        this._listeners.forEach(callback => {
-            try {
-                callback(event);
-            } catch (error) {
-                console.error('Error in setting change listener:', error);
+        chrome.storage.onChanged.addListener((changes, _) => {
+            for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
+              if(key == this.key && oldValue != newValue){
+                // Call all registered listeners with the old and new values
+                this._listeners.forEach(listener => {
+                    listener(new SettingChangedEvent(oldValue, newValue));
+                });
+                break;
+              }
             }
         });
+    }
+
+    addChangeListener(listener){
+        this._listeners.add(listener);
+    }
+
+    removeChangeListener(listener){
+        this._listeners.delete(listener);
     }
 
     Get(){
@@ -60,22 +54,17 @@ class Setting{
 
     Set(value){
         return new Promise((resolve, reject)=>{
-            // Get current value before setting new one
-            this.Get().then(oldValue => {
-                if(this.local){
-                    LocalSetting.Set(this.key, value).then(result=>{
-                        this._notifyListeners(oldValue, value);
-                        resolve(result);
-                    })
-                    .catch(err => reject(err));
-                }else{
-                    GlobalSetting.Set(this.key, value).then(result=>{
-                        this._notifyListeners(oldValue, value);
-                        resolve(result);
-                    })
-                    .catch(err => reject(err));
-                }
-            }).catch(err => reject(err));
+            if(this.local){
+                LocalSetting.Set(this.key, value).then(result=>{
+                    resolve(result);
+                })
+                .catch(err => reject(err));
+            }else{
+                GlobalSetting.Set(this.key, value).then(result=>{
+                    resolve(result);
+                })
+                .catch(err => reject(err));
+            }
         })
     }
 }
@@ -112,7 +101,8 @@ export class GlobalSetting {
 }
 
 export class LocalSetting {
-    static A = new Setting('A', false, true);
+    static GLOBAL_ENABLED = new Setting('GLOBAL_ENABLED', true, true);
+    static PAGE_ENABLED = new Setting('PAGE_ENABLED', [], true);
 
     static Get(keys){
         return new Promise((resolve, reject) => {

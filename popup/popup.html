@@ -2,17 +2,58 @@
 <html lang="en">
 <head>
     <link rel="stylesheet" href="./popup.css">
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous"> -->
-    <script src="../bootstrap.js"></script>
-    <title>TITLE</title>
+    <title>ADHD Video Extension</title>
 </head>
 <body>
     <div class="container">
-  
+        <h1>Video Controls</h1>
         
+        <div class="power-buttons">
+            <div class="power-btn-container">
+                <button id="power-global" class="power-btn">
+                    <svg class="power-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42C17.99 7.86 19 9.81 19 12c0 3.87-3.13 7-7 7s-7-3.13-7-7c0-2.19 1.01-4.14 2.58-5.42L6.17 5.17C4.23 6.82 3 9.26 3 12c0 4.97 4.03 9 9 9s9-4.03 9-9c0-2.74-1.23-5.18-3.17-6.83z"/>
+                    </svg>
+                </button>
+                <span class="power-label">Global</span>
+            </div>
+            <div class="power-btn-container">
+                <button id="power-current-page" class="power-btn">
+                    <svg class="power-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42C17.99 7.86 19 9.81 19 12c0 3.87-3.13 7-7 7s-7-3.13-7-7c0-2.19 1.01-4.14 2.58-5.42L6.17 5.17C4.23 6.82 3 9.26 3 12c0 4.97 4.03 9 9 9s9-4.03 9-9c0-2.74-1.23-5.18-3.17-6.83z"/>
+                    </svg>
+                </button>
+                <span class="power-label">Current Page</span>
+            </div>
+        </div>
         
-
-        <script src="./popup.js" type="module" defer></script>
-      </div>
+        <div class="settings-grid">
+            <div class="setting-item">
+                <label for="scale-toggle">Scale</label>
+                <input type="checkbox" id="scale-toggle" class="toggle-switch">
+            </div>
+            <div class="setting-item">
+                <label for="volume-toggle">Volume</label>
+                <input type="checkbox" id="volume-toggle" class="toggle-switch">
+            </div>
+            <div class="setting-item">
+                <label for="speed-toggle">Speed</label>
+                <input type="checkbox" id="speed-toggle" class="toggle-switch">
+            </div>
+            <div class="setting-item">
+                <label for="glow-toggle">Glow</label>
+                <input type="checkbox" id="glow-toggle" class="toggle-switch">
+            </div>
+            <div class="setting-item">
+                <label for="movement-toggle">Movement</label>
+                <input type="checkbox" id="movement-toggle" class="toggle-switch">
+            </div>
+            <div class="setting-item">
+                <label for="jitter-toggle">Jitter</label>
+                <input type="checkbox" id="jitter-toggle" class="toggle-switch">
+            </div>
+        </div>
+        <script src="../dist/popup/popup.js" type="module" defer></script>
+    </div>
 </body>
 </html>

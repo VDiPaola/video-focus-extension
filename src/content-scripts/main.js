@@ -1,3 +1,4 @@
+import { LocalSetting } from "../classes-shared/Settings";
 import { waitForElement } from "./classes/Helpers";
 import { VideoGlow } from "./Features/VideoGlow";
 import { VideoJitter } from "./Features/VideoJitter";
@@ -11,20 +12,41 @@ export class Extension{
     static intervalId;
     static interval = 100;
 
-    static featureList = new Set();
+    static featureList = new Set([
+        new VideoScale(),
+        new VideoSpeed(),
+        new VideoVolume(),
+        new VideoGlow(),
+        new VideoJitter(),
+        new VideoMovement()
+    ]);
 
     static async init (){
+        LocalSetting.GLOBAL_ENABLED.Get()
+        .then(globalEnabled => {
+            if(globalEnabled){
+                this._start();
+            }
+
+            LocalSetting.GLOBAL_ENABLED.addChangeListener((event) => {
+                if(event.newValue == false && this.intervalId){
+                    //global enabled = false, clear interval
+                    clearInterval(this.intervalId);
+                    this.intervalId = null;
+                }
+                if(event.newValue == true && !this.intervalId){
+                    this._start();
+                }
+            })
+        })
+        .catch(err => {console.error(err)})
+    }
+
+    static async _start(){
         //wait for video element
         waitForElement(document.body, "video")
         .then(videoElement => {
-
-            this.featureList.add(new VideoScale());
-            this.featureList.add(new VideoSpeed());
-            this.featureList.add(new VideoVolume());
-            this.featureList.add(new VideoGlow());
-            this.featureList.add(new VideoJitter());
-            this.featureList.add(new VideoMovement());
-
+            if(this.intervalId) return;
             this.intervalId = setInterval(() => {
                 this.featureList.forEach((feature) => {
                     feature.process(videoElement);
