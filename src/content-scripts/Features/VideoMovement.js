@@ -7,6 +7,8 @@ export class VideoMovement{
     amp = 10;
     freq = 0.0015;
 
+    initialValue
+
     constructor(){
         GlobalSetting.MOVEMENT_ENABLED.Get()
         .then(enabled => {
@@ -20,10 +22,17 @@ export class VideoMovement{
     }
 
     process(videoElement){
-        if (!videoElement || !this.enabled) return;
+        if (!videoElement || !this.enabled) return this.reset();
+        if(this.initialValue === undefined) this.initialValue = videoElement.style.transform ?? "";
+
         const t = Date.now() - this.start;
         const x = this.amp * Math.sin(t * this.freq);
         const y = this.amp * Math.cos(t * this.freq * 0.8);
         videoElement.style.transform = `translate(${x}px, ${y}px)`;
+    }
+
+    reset(videoElement){
+        if(!videoElement) return;
+        videoElement.style.transform = this.initialValue;
     }
 }

@@ -21,6 +21,8 @@ export class Extension{
         new VideoMovement()
     ]);
 
+    static videoElement
+
     static async init (){
         LocalSetting.GLOBAL_ENABLED.Get()
         .then(globalEnabled => {
@@ -30,9 +32,15 @@ export class Extension{
 
             LocalSetting.GLOBAL_ENABLED.addChangeListener((event) => {
                 if(event.newValue == false && this.intervalId){
-                    //global enabled = false, clear interval
+                    //global enabled = false, clear interval, reset features
                     clearInterval(this.intervalId);
                     this.intervalId = null;
+
+                    if(!this.videoElement) return;
+                    this.featureList.forEach((feature) => {
+                        feature.reset(this.videoElement);
+                    })
+
                 }
                 if(event.newValue == true && !this.intervalId){
                     this._start();
@@ -47,6 +55,8 @@ export class Extension{
         waitForElement(document.body, "video")
         .then(videoElement => {
             if(this.intervalId) return;
+            this.videoElement = videoElement;
+
             this.intervalId = setInterval(() => {
                 this.featureList.forEach((feature) => {
                     feature.process(videoElement);

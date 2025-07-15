@@ -7,6 +7,8 @@ export class VideoVolume{
     volAmp = 0.2;
     volFreq = 0.002;
 
+    initialValue
+
     constructor(){
         GlobalSetting.VOLUME_ENABLED.Get()
         .then(enabled => {
@@ -20,7 +22,14 @@ export class VideoVolume{
     }
 
     process(videoElement){
-        if (!videoElement || !this.enabled) return;
+        if (!videoElement || !this.enabled) return this.reset();
+        if(this.initialValue === undefined) this.initialValue = videoElement.volume ?? 0.2;
+
         videoElement.volume = Math.max(0, Math.min(1, this.volBase + this.volAmp * Math.sin(Date.now() * this.volFreq)));
+    }
+
+    reset(videoElement){
+        if(!videoElement) return;
+        videoElement.volume = this.initialValue;
     }
 }

@@ -18,8 +18,13 @@ export class VideoGlow{
     }
 
     process(videoElement){
-        if (!videoElement || !this.enabled) return;
+        if (!videoElement || !this.enabled) return this.reset();
         const glow = 10 + 10 * Math.sin(Date.now() * this.glowFreq);
         videoElement.style.boxShadow = `0 0 ${glow}px rgba(255, 255, 255, 0.5)`;
+    }
+
+    reset(videoElement){
+        if(!videoElement) return;
+        videoElement.style.boxShadow = "";
     }
 }

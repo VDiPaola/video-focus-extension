@@ -64,7 +64,7 @@ async function initializePopup() {
     const powerGlobal = document.getElementById('power-global');
     const powerCurrentPage = document.getElementById('power-current-page');
 
-    const globalEnabled = LocalSetting.GLOBAL_ENABLED.Get();
+    const globalEnabled = await LocalSetting.GLOBAL_ENABLED.Get();
     if(globalEnabled){
         powerGlobal.classList.add("enabled")
     }

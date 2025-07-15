@@ -11,6 +11,7 @@ export class VideoJitter{
     interval = 100; // ms - update rate
 
     initPos
+    initTransform
 
     constructor(){
         GlobalSetting.JITTER_ENABLED.Get()
@@ -25,17 +26,18 @@ export class VideoJitter{
     }
 
     process(videoElement){
-        if (!videoElement || !this.enabled) {
-            if(this.initPos && videoElement) {
-                videoElement.style.position = this.initPos;
-                videoElement.style.transform = "";
-            }
-            return;
-        }
-        if (!this.initPos) this.initPos = videoElement.style.position;
+        if (!videoElement || !this.enabled) return this.reset();
+        if (this.initPos === undefined) this.initPos = videoElement.style.position ?? "";
+        if(this.initTransform === undefined) this.initTransform = videoElement.style.transform ?? "";
         videoElement.style.position = 'relative';
         const offsetX = (Math.random() - 0.5) * 2 * this.maxOffset;
         const offsetY = (Math.random() - 0.5) * 2 * this.maxOffset;
         videoElement.style.transform = `translate(${this.baseX + offsetX}px, ${this.baseY + offsetY}px)`;
+    }
+
+    reset(videoElement){
+        if(!videoElement) return;
+        videoElement.style.position = this.initPos;
+        videoElement.style.transform = this.initTransform;
     }
 }
