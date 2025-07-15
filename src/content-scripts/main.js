@@ -36,9 +36,8 @@ export class Extension{
                     clearInterval(this.intervalId);
                     this.intervalId = null;
 
-                    if(!this.videoElement) return;
                     this.featureList.forEach((feature) => {
-                        feature.reset(this.videoElement);
+                        feature.reset();
                     })
 
                 }
@@ -59,7 +58,7 @@ export class Extension{
 
             this.intervalId = setInterval(() => {
                 this.featureList.forEach((feature) => {
-                    feature.process(videoElement);
+                    if(feature.enabled) feature.process(videoElement);
                 })
             }, this.interval);
 

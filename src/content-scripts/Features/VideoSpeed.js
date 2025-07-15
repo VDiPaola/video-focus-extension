@@ -7,6 +7,8 @@ export class VideoSpeed{
 
     enabled = false;
 
+    videoElement
+
     constructor(){
         GlobalSetting.SPEED_ENABLED.Get()
         .then(speedEnabled => {
@@ -15,17 +17,21 @@ export class VideoSpeed{
         .catch(err => {console.error(err)})
 
         GlobalSetting.SPEED_ENABLED.addChangeListener((event)=>{
-            this.enabled = event.newValue;
+            if(this.enabled !== event.newValue){
+                this.enabled = event.newValue;
+                this.reset();
+            }
         })
     }
 
     process(videoElement){
         if (!videoElement || !this.enabled) return this.reset(videoElement);
+        this.videoElement = videoElement;
         videoElement.playbackRate = this.speedBase + this.speedAmp * Math.sin(Date.now() * this.speedFreq);
     }
 
-    reset(videoElement){
-        if(!videoElement) return;
-        videoElement.playbackRate = 1;
+    reset(){
+        if(!this.videoElement) return;
+        this.videoElement.playbackRate = 1;
     }
 }

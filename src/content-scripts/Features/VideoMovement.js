@@ -9,6 +9,8 @@ export class VideoMovement{
 
     initialValue
 
+    videoElement
+
     constructor(){
         GlobalSetting.MOVEMENT_ENABLED.Get()
         .then(enabled => {
@@ -17,7 +19,10 @@ export class VideoMovement{
         .catch(err => {console.error(err)})
 
         GlobalSetting.MOVEMENT_ENABLED.addChangeListener((event)=>{
-            this.enabled = event.newValue;
+            if(this.enabled !== event.newValue){
+                this.enabled = event.newValue;
+                this.reset();
+            }
         })
     }
 
@@ -25,14 +30,16 @@ export class VideoMovement{
         if (!videoElement || !this.enabled) return this.reset(videoElement);
         if(this.initialValue === undefined) this.initialValue = videoElement.style.transform ?? "";
 
+        this.videoElement = videoElement;
+
         const t = Date.now() - this.start;
         const x = this.amp * Math.sin(t * this.freq);
         const y = this.amp * Math.cos(t * this.freq * 0.8);
         videoElement.style.transform = `translate(${x}px, ${y}px)`;
     }
 
-    reset(videoElement){
-        if(!videoElement) return;
-        videoElement.style.transform = this.initialValue;
+    reset(){
+        if(!this.videoElement) return;
+        this.videoElement.style.transform = this.initialValue;
     }
 }

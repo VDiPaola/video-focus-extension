@@ -9,6 +9,8 @@ export class VideoVolume{
 
     initialValue
 
+    videoElement
+
     constructor(){
         GlobalSetting.VOLUME_ENABLED.Get()
         .then(enabled => {
@@ -17,7 +19,10 @@ export class VideoVolume{
         .catch(err => {console.error(err)})
 
         GlobalSetting.VOLUME_ENABLED.addChangeListener((event)=>{
-            this.enabled = event.newValue;
+            if(this.enabled !== event.newValue){
+                this.enabled = event.newValue;
+                this.reset();
+            }
         })
     }
 
@@ -25,11 +30,12 @@ export class VideoVolume{
         if (!videoElement || !this.enabled) return this.reset(videoElement);
         if(this.initialValue === undefined) this.initialValue = videoElement.volume ?? 0.2;
 
+        this.videoElement = videoElement;
         videoElement.volume = Math.max(0, Math.min(1, this.volBase + this.volAmp * Math.sin(Date.now() * this.volFreq)));
     }
 
-    reset(videoElement){
-        if(!videoElement) return;
-        videoElement.volume = this.initialValue;
+    reset(){
+        if(!this.videoElement) return;
+        this.videoElement.volume = this.initialValue;
     }
 }

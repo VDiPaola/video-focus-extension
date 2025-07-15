@@ -12,6 +12,8 @@ export class VideoJitter{
 
     initPos
     initTransform
+    
+    videoElement
 
     constructor(){
         GlobalSetting.JITTER_ENABLED.Get()
@@ -21,7 +23,10 @@ export class VideoJitter{
         .catch(err => {console.error(err)})
 
         GlobalSetting.JITTER_ENABLED.addChangeListener((event)=>{
-            this.enabled = event.newValue;
+            if(this.enabled !== event.newValue){
+                this.enabled = event.newValue;
+                this.reset();
+            }
         })
     }
 
@@ -29,16 +34,18 @@ export class VideoJitter{
         if (!videoElement || !this.enabled) return this.reset(videoElement);
         if (this.initPos === undefined) this.initPos = videoElement.style.position ?? "";
         if(this.initTransform === undefined) this.initTransform = videoElement.style.transform ?? "";
-        
+
+        this.videoElement = videoElement;
+
         videoElement.style.position = 'relative';
         const offsetX = (Math.random() - 0.5) * 2 * this.maxOffset;
         const offsetY = (Math.random() - 0.5) * 2 * this.maxOffset;
         videoElement.style.transform = `translate(${this.baseX + offsetX}px, ${this.baseY + offsetY}px)`;
     }
 
-    reset(videoElement){
-        if(!videoElement) return;
-        videoElement.style.position = this.initPos;
-        videoElement.style.transform = this.initTransform;
+    reset(){
+        if(!this.videoElement) return;
+        this.videoElement.style.position = this.initPos;
+        this.videoElement.style.transform = this.initTransform;
     }
 }
