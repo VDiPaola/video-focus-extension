@@ -22,7 +22,7 @@ export class VideoScale{
     }
 
     process(videoElement){
-        if (!videoElement || !this.enabled) return this.reset();
+        if (!videoElement || !this.enabled) return this.reset(videoElement);
         if(this.initialValue === undefined) this.initialValue = videoElement.style.transform ?? "";
 
         const scale = this.scaleBase + this.scaleAmp * Math.sin(Date.now() * this.scaleFreq);

@@ -22,7 +22,7 @@ export class VideoMovement{
     }
 
     process(videoElement){
-        if (!videoElement || !this.enabled) return this.reset();
+        if (!videoElement || !this.enabled) return this.reset(videoElement);
         if(this.initialValue === undefined) this.initialValue = videoElement.style.transform ?? "";
 
         const t = Date.now() - this.start;

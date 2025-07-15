@@ -20,7 +20,7 @@ export class VideoSpeed{
     }
 
     process(videoElement){
-        if (!videoElement || !this.enabled) return this.reset();
+        if (!videoElement || !this.enabled) return this.reset(videoElement);
         videoElement.playbackRate = this.speedBase + this.speedAmp * Math.sin(Date.now() * this.speedFreq);
     }
 

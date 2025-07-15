@@ -18,7 +18,7 @@ export class VideoGlow{
     }
 
     process(videoElement){
-        if (!videoElement || !this.enabled) return this.reset();
+        if (!videoElement || !this.enabled) return this.reset(videoElement);
         const glow = 10 + 10 * Math.sin(Date.now() * this.glowFreq);
         videoElement.style.boxShadow = `0 0 ${glow}px rgba(255, 255, 255, 0.5)`;
     }

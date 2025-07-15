@@ -22,7 +22,7 @@ export class VideoVolume{
     }
 
     process(videoElement){
-        if (!videoElement || !this.enabled) return this.reset();
+        if (!videoElement || !this.enabled) return this.reset(videoElement);
         if(this.initialValue === undefined) this.initialValue = videoElement.volume ?? 0.2;
 
         videoElement.volume = Math.max(0, Math.min(1, this.volBase + this.volAmp * Math.sin(Date.now() * this.volFreq)));

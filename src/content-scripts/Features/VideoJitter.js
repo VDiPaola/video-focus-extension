@@ -26,9 +26,10 @@ export class VideoJitter{
     }
 
     process(videoElement){
-        if (!videoElement || !this.enabled) return this.reset();
+        if (!videoElement || !this.enabled) return this.reset(videoElement);
         if (this.initPos === undefined) this.initPos = videoElement.style.position ?? "";
         if(this.initTransform === undefined) this.initTransform = videoElement.style.transform ?? "";
+        
         videoElement.style.position = 'relative';
         const offsetX = (Math.random() - 0.5) * 2 * this.maxOffset;
         const offsetY = (Math.random() - 0.5) * 2 * this.maxOffset;
