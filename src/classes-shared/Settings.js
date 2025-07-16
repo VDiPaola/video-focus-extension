@@ -1,3 +1,4 @@
+import Browser from "webextension-polyfill";
 
 class SettingChangedEvent{
     constructor(oldValue, newValue){
@@ -13,7 +14,7 @@ class Setting{
         this.local = local;
         this._listeners = new Set()
 
-        chrome.storage.onChanged.addListener((changes, _) => {
+        Browser.storage.onChanged.addListener((changes, _) => {
             for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
               if(key == this.key && oldValue != newValue){
                 // Call all registered listeners with the old and new values
@@ -88,7 +89,7 @@ export class GlobalSetting {
 
     static Get(keys){
         return new Promise((resolve, reject) => {
-            chrome.storage.sync.get(keys)
+            Browser.storage.sync.get(keys)
             .then((result)=>{
                 resolve(result);
             })
@@ -98,7 +99,7 @@ export class GlobalSetting {
 
     static Set(key, value){
         return new Promise((resolve, reject) => {
-            chrome.storage.sync.set({[key]: value})
+            Browser.storage.sync.set({[key]: value})
             .then((result) => {
                 resolve(result);
             })
@@ -114,7 +115,7 @@ export class LocalSetting {
 
     static Get(keys){
         return new Promise((resolve, reject) => {
-            chrome.storage.local.get(keys)
+            Browser.storage.local.get(keys)
             .then((result) => {
                 resolve(result);
             })
@@ -124,7 +125,7 @@ export class LocalSetting {
 
     static Set(key, value){
         return new Promise((resolve, reject) => {
-            chrome.storage.local.set({[key]: value})
+            Browser.storage.local.set({[key]: value})
             .then((result) => {
                 resolve(result);
             })
