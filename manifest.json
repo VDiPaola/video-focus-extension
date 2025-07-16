@@ -1,8 +1,8 @@
 {
     "manifest_version": 3,
-    "name": "ADHD Video Player",
+    "name": "Video Focus",
     "version": "1.0.1",
-    "description": "Customise video playback to make it more engaging, useful if you struggle paying attention to videos",
+    "description": "Customise video playback to make it more engaging, can be useful if you struggle paying attention to videos",
     "icons":{
         "128": "icon.png",
         "48": "icon.png",
@@ -11,7 +11,7 @@
 
     "action": {
         "default_popup": "popup/popup.html",
-        "default_title": "ADHD Video Controls"
+        "default_title": "Video Focus"
     },
 
     "permissions": [
