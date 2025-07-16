@@ -1,3 +1,4 @@
+import { cleanURL } from "../classes-shared/helpers";
 import { LocalSetting } from "../classes-shared/Settings";
 import { waitForElement } from "./classes/Helpers";
 import { VideoGlow } from "./Features/VideoGlow";
@@ -10,7 +11,7 @@ import { VideoVolume } from "./Features/VideoVolume";
 export class Extension{
 
     static intervalId;
-    static interval = 100;
+    static interval = 50; //ms
 
     static featureList = new Set([
         new VideoScale(),
@@ -32,24 +33,49 @@ export class Extension{
 
             LocalSetting.GLOBAL_ENABLED.addChangeListener((event) => {
                 if(event.newValue == false && this.intervalId){
-                    //global enabled = false, clear interval, reset features
-                    clearInterval(this.intervalId);
-                    this.intervalId = null;
-
-                    this.featureList.forEach((feature) => {
-                        feature.reset();
-                    })
-
+                    this.disable();
                 }
                 if(event.newValue == true && !this.intervalId){
-                    this._start();
+                    this._start();  
                 }
             })
+
+            LocalSetting.PAGE_BLACKLIST.addChangeListener(async (event) => {
+                if(!this.intervalId){
+                    LocalSetting.GLOBAL_ENABLED.Get()
+                    .then(globalEnabled => {
+                        if(globalEnabled) this._start();
+                    })
+                }else{
+                    const url = cleanURL(window.location.href);
+                    const pages = event.newValue;
+                    if(pages?.[url]) {
+                        this.disable();
+                    }
+                }
+            })
+
         })
         .catch(err => {console.error(err)})
     }
 
+    static async disable(){
+        //global enabled = false, clear interval, reset features
+        if(this.intervalId){
+            clearInterval(this.intervalId);
+            this.intervalId = null;
+        }
+
+        this.featureList.forEach((feature) => {
+            feature.reset();
+        })
+    }
+
     static async _start(){
+        //make sure not in blacklist
+        const url = cleanURL(window.location.href);
+        const pages = await LocalSetting.PAGE_BLACKLIST.Get();
+        if(pages?.[url]) return;
         //wait for video element
         waitForElement(document.body, "video")
         .then(videoElement => {

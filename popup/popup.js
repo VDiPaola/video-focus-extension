@@ -1,4 +1,5 @@
 // Import the Settings class
+import { cleanURL } from '../src/classes-shared/helpers.js';
 import { GlobalSetting, LocalSetting } from '../src/classes-shared/Settings.js';
 
 // Gets current tab
@@ -6,6 +7,12 @@ async function getCurrentTab() {
     let queryOptions = { active: true, currentWindow: true };
     let [tab] = await chrome.tabs.query(queryOptions);
     return tab;
+}
+
+// Gets current tab url
+async function getCurrentURL() {
+    const tab = await getCurrentTab();
+    return cleanURL(tab.url ?? "");
 }
 
 // Mapping of toggle IDs to their corresponding settings
@@ -68,6 +75,12 @@ async function initializePopup() {
     if(globalEnabled){
         powerGlobal.classList.add("enabled")
     }
+
+    const pageBlacklist = await LocalSetting.PAGE_BLACKLIST.Get();
+    const url = await getCurrentURL();
+    if(!pageBlacklist?.[url]){
+        powerCurrentPage.classList.add("enabled");
+    }
     
     if (powerGlobal) {
         powerGlobal.addEventListener('click', () => {
@@ -83,7 +96,22 @@ async function initializePopup() {
     
     if (powerCurrentPage) {
         powerCurrentPage.addEventListener('click', () => {
-            powerCurrentPage.classList.toggle('enabled');
+            const isEnabled = !powerCurrentPage.classList.contains("enabled");
+            if(isEnabled){
+                powerCurrentPage.classList.add("enabled");
+            }else{
+                powerCurrentPage.classList.remove("enabled");
+            }
+            LocalSetting.PAGE_BLACKLIST.Get()
+            .then(async (pageBlacklist) => {
+                const url = await getCurrentURL();
+                if(isEnabled){
+                    delete pageBlacklist[url];
+                }else{
+                    pageBlacklist[url] = true;
+                }
+                LocalSetting.PAGE_BLACKLIST.Set(pageBlacklist);
+            })
         });
     }
     

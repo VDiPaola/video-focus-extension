@@ -102,7 +102,7 @@ export class GlobalSetting {
 
 export class LocalSetting {
     static GLOBAL_ENABLED = new Setting('GLOBAL_ENABLED', true, true);
-    static PAGE_ENABLED = new Setting('PAGE_ENABLED', [], true);
+    static PAGE_BLACKLIST = new Setting('PAGE_BLACKLIST', {}, true);
 
     static Get(keys){
         return new Promise((resolve, reject) => {
