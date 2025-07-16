@@ -1,7 +1,7 @@
 {
-  "name": "adhd-video",
+  "name": "video-focus",
   "version": "1.0.0",
-  "description": "Customise video playback to make it more engaging, useful if you struggle paying attention to videos",
+  "description": "",
   "scripts": {
     "build": "webpack --config ./webpack.config.js",
     "publish": "powershell compress-archive -Force './dist','./manifest.json','./styles','./icon.png' Extension.zip"
