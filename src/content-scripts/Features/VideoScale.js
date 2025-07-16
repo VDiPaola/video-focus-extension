@@ -1,4 +1,5 @@
 import { GlobalSetting } from "../../classes-shared/Settings";
+import { TransformManager } from "../classes/TransformManager";
 
 export class VideoScale{
     scaleBase = 1;
@@ -6,8 +7,6 @@ export class VideoScale{
     scaleFreq = 0.0015;
 
     enabled = false;
-
-    initialValue
 
     videoElement
 
@@ -28,16 +27,15 @@ export class VideoScale{
 
     process(videoElement){
         if (!videoElement || !this.enabled) return this.reset(videoElement);
-        if(this.initialValue === undefined) this.initialValue = videoElement.style.transform ?? "";
 
         this.videoElement = videoElement;
 
         const scale = this.scaleBase + this.scaleAmp * Math.sin(Date.now() * this.scaleFreq);
-        videoElement.style.transform = `scale(${scale})`;
+        TransformManager.setTransform(videoElement, 'scale', `scale(${scale})`);
     }
 
     reset(){
         if(!this.videoElement) return;
-        this.videoElement.style.transform = this.initialValue;
+        TransformManager.removeTransform(this.videoElement, 'scale');
     }
 }

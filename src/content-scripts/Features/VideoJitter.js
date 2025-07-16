@@ -1,4 +1,5 @@
 import { GlobalSetting } from "../../classes-shared/Settings";
+import { TransformManager } from "../classes/TransformManager";
 
 export class VideoJitter{
     enabled = false;
@@ -11,8 +12,6 @@ export class VideoJitter{
     interval = 100; // ms - update rate
 
     initPos
-    initTransform
-    
     videoElement
 
     constructor(){
@@ -33,19 +32,18 @@ export class VideoJitter{
     process(videoElement){
         if (!videoElement || !this.enabled) return this.reset(videoElement);
         if (this.initPos === undefined) this.initPos = videoElement.style.position ?? "";
-        if(this.initTransform === undefined) this.initTransform = videoElement.style.transform ?? "";
 
         this.videoElement = videoElement;
 
         videoElement.style.position = 'relative';
         const offsetX = (Math.random() - 0.5) * 2 * this.maxOffset;
         const offsetY = (Math.random() - 0.5) * 2 * this.maxOffset;
-        videoElement.style.transform = `translate(${this.baseX + offsetX}px, ${this.baseY + offsetY}px)`;
+        TransformManager.setTransform(videoElement, 'jitter', `translate(${this.baseX + offsetX}px, ${this.baseY + offsetY}px)`);
     }
 
     reset(){
         if(!this.videoElement) return;
         this.videoElement.style.position = this.initPos;
-        this.videoElement.style.transform = this.initTransform;
+        TransformManager.removeTransform(this.videoElement, 'jitter');
     }
 }

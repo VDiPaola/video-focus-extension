@@ -71,12 +71,12 @@ class Setting{
 
 
 export class GlobalSetting {
-    static SCALE_ENABLED = new Setting('SCALE_ENABLED', true, false);
-    static VOLUME_ENABLED = new Setting('VOLUME_ENABLED', true, false);
-    static SPEED_ENABLED = new Setting('SPEED_ENABLED', true, false);
-    static GLOW_ENABLED = new Setting('GLOW_ENABLED', true, false);
-    static MOVEMENT_ENABLED = new Setting('MOVEMENT_ENABLED', true, false);
-    static JITTER_ENABLED = new Setting('JITTER_ENABLED', true, false);
+    static SCALE_ENABLED = new Setting('SCALE_ENABLED', false, false);
+    static VOLUME_ENABLED = new Setting('VOLUME_ENABLED', false, false);
+    static SPEED_ENABLED = new Setting('SPEED_ENABLED', false, false);
+    static GLOW_ENABLED = new Setting('GLOW_ENABLED', false, false);
+    static MOVEMENT_ENABLED = new Setting('MOVEMENT_ENABLED', false, false);
+    static JITTER_ENABLED = new Setting('JITTER_ENABLED', false, false);
 
     static Get(keys){
         return new Promise((resolve, reject) => {
