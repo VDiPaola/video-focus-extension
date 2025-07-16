@@ -61,8 +61,8 @@ h1 {
     justify-content: center;
 }
 
-.power-btn:hover {
-    background: #3182ce;
+.power-btn:hover:not(.enabled) {
+    background: #858991 !important;;
     transform: scale(1.05);
 }
 
@@ -72,6 +72,12 @@ h1 {
 
 .power-btn.enabled {
     background: #4299e1 !important;
+    box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
+}
+
+.power-btn.enabled:hover {
+    background: #3182ce !important;
+    transform: scale(1.05);
 }
 
 .power-icon {
