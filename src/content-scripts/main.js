@@ -10,8 +10,9 @@ import { VideoVolume } from "./Features/VideoVolume";
 
 export class Extension{
 
-    static intervalId;
-    static interval = 50; //ms
+    static animationFrameId;
+    static lastFrameTime = 0;
+    static targetFrameTime = 50; //ms - equivalent to the previous interval
 
     static featureList = new Set([
         new VideoScale(),
@@ -32,16 +33,16 @@ export class Extension{
             }
 
             LocalSetting.GLOBAL_ENABLED.addChangeListener((event) => {
-                if(event.newValue == false && this.intervalId){
+                if(event.newValue == false && this.animationFrameId){
                     this.disable();
                 }
-                if(event.newValue == true && !this.intervalId){
+                if(event.newValue == true && !this.animationFrameId){
                     this._start();  
                 }
             })
 
             LocalSetting.PAGE_BLACKLIST.addChangeListener(async (event) => {
-                if(!this.intervalId){
+                if(!this.animationFrameId){
                     LocalSetting.GLOBAL_ENABLED.Get()
                     .then(globalEnabled => {
                         if(globalEnabled) this._start();
@@ -60,10 +61,10 @@ export class Extension{
     }
 
     static async disable(){
-        //global enabled = false, clear interval, reset features
-        if(this.intervalId){
-            clearInterval(this.intervalId);
-            this.intervalId = null;
+        //global enabled = false, cancel animation frame, reset features
+        if(this.animationFrameId){
+            cancelAnimationFrame(this.animationFrameId);
+            this.animationFrameId = null;
         }
 
         this.featureList.forEach((feature) => {
@@ -79,17 +80,26 @@ export class Extension{
         //wait for video element
         waitForElement(document.body, "video")
         .then(videoElement => {
-            if(this.intervalId) return;
+            if(this.animationFrameId) return;
             this.videoElement = videoElement;
+            this.lastFrameTime = performance.now();
 
-            this.intervalId = setInterval(() => {
-                this.featureList.forEach((feature) => {
-                    if(feature.enabled) feature.process(videoElement);
-                })
-            }, this.interval);
-
+            this._animate();
         })
         .catch(err => {console.error(err)})
+    }
+
+    static _animate(currentTime = performance.now()) {
+        // Check if enough time has passed since last frame (equivalent to interval)
+        if (currentTime - this.lastFrameTime >= this.targetFrameTime) {
+            this.featureList.forEach((feature) => {
+                if(feature.enabled) feature.process(this.videoElement);
+            });
+            this.lastFrameTime = currentTime;
+        }
+
+        // Continue the animation loop
+        this.animationFrameId = requestAnimationFrame((time) => this._animate(time));
     }
 }
 
