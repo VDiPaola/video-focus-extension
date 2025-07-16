@@ -6,6 +6,7 @@ export class VideoSpeed{
     speedFreq = 0.002;
 
     enabled = false;
+    intensity = 1;
 
     videoElement
 
@@ -16,10 +17,22 @@ export class VideoSpeed{
         })
         .catch(err => {console.error(err)})
 
+        GlobalSetting.SPEED_INTENSITY.Get()
+        .then(intensity => {
+            this.intensity = intensity;
+        })
+        .catch(err => {console.error(err)})
+
         GlobalSetting.SPEED_ENABLED.addChangeListener((event)=>{
             if(this.enabled !== event.newValue){
                 this.enabled = event.newValue;
                 this.reset();
+            }
+        })
+
+        GlobalSetting.SPEED_INTENSITY.addChangeListener((event)=>{
+            if(this.intensity !== event.newValue){
+                this.intensity = event.newValue;
             }
         })
     }
@@ -27,7 +40,9 @@ export class VideoSpeed{
     process(videoElement){
         if (!videoElement || !this.enabled) return this.reset(videoElement);
         this.videoElement = videoElement;
-        videoElement.playbackRate = this.speedBase + this.speedAmp * Math.sin(Date.now() * this.speedFreq);
+        const baseSpeed = this.speedBase + this.speedAmp * Math.sin(Date.now() * this.speedFreq);
+        const adjustedSpeed = this.speedBase + (baseSpeed - this.speedBase) * this.intensity;
+        videoElement.playbackRate = adjustedSpeed;
     }
 
     reset(){

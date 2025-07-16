@@ -27,28 +27,94 @@
         
         <div class="settings-grid">
             <div class="setting-item">
-                <label for="scale-toggle">Scale</label>
-                <input type="checkbox" id="scale-toggle" class="toggle-switch">
+                <div class="setting-header">
+                    <label for="scale-toggle">Scale</label>
+                    <input type="checkbox" id="scale-toggle" class="toggle-switch">
+                </div>
+                <button class="dropdown-arrow" data-target="scale-intensity">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M7 10l5 5 5-5z"/>
+                    </svg>
+                </button>
+                <div id="scale-intensity" class="intensity-slider-container hidden">
+                    <label for="scale-intensity-slider">Intensity: <span class="intensity-value">1.0</span></label>
+                    <input type="range" id="scale-intensity-slider" class="intensity-slider" min="0" max="2" step="0.1" value="1">
+                </div>
             </div>
             <div class="setting-item">
-                <label for="volume-toggle">Volume</label>
-                <input type="checkbox" id="volume-toggle" class="toggle-switch">
+                <div class="setting-header">
+                    <label for="volume-toggle">Volume</label>
+                    <input type="checkbox" id="volume-toggle" class="toggle-switch">
+                </div>
+                <button class="dropdown-arrow" data-target="volume-intensity">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M7 10l5 5 5-5z"/>
+                    </svg>
+                </button>
+                <div id="volume-intensity" class="intensity-slider-container hidden">
+                    <label for="volume-intensity-slider">Intensity: <span class="intensity-value">1.0</span></label>
+                    <input type="range" id="volume-intensity-slider" class="intensity-slider" min="0" max="2" step="0.1" value="1">
+                </div>
             </div>
             <div class="setting-item">
-                <label for="speed-toggle">Speed</label>
-                <input type="checkbox" id="speed-toggle" class="toggle-switch">
+                <div class="setting-header">
+                    <label for="speed-toggle">Speed</label>
+                    <input type="checkbox" id="speed-toggle" class="toggle-switch">
+                </div>
+                <button class="dropdown-arrow" data-target="speed-intensity">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M7 10l5 5 5-5z"/>
+                    </svg>
+                </button>
+                <div id="speed-intensity" class="intensity-slider-container hidden">
+                    <label for="speed-intensity-slider">Intensity: <span class="intensity-value">1.0</span></label>
+                    <input type="range" id="speed-intensity-slider" class="intensity-slider" min="0" max="2" step="0.1" value="1">
+                </div>
             </div>
             <div class="setting-item">
-                <label for="glow-toggle">Glow</label>
-                <input type="checkbox" id="glow-toggle" class="toggle-switch">
+                <div class="setting-header">
+                    <label for="glow-toggle">Glow</label>
+                    <input type="checkbox" id="glow-toggle" class="toggle-switch">
+                </div>
+                <button class="dropdown-arrow" data-target="glow-intensity">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M7 10l5 5 5-5z"/>
+                    </svg>
+                </button>
+                <div id="glow-intensity" class="intensity-slider-container hidden">
+                    <label for="glow-intensity-slider">Intensity: <span class="intensity-value">1.0</span></label>
+                    <input type="range" id="glow-intensity-slider" class="intensity-slider" min="0" max="2" step="0.1" value="1">
+                </div>
             </div>
             <div class="setting-item">
-                <label for="movement-toggle">Movement</label>
-                <input type="checkbox" id="movement-toggle" class="toggle-switch">
+                <div class="setting-header">
+                    <label for="movement-toggle">Movement</label>
+                    <input type="checkbox" id="movement-toggle" class="toggle-switch">
+                </div>
+                <button class="dropdown-arrow" data-target="movement-intensity">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M7 10l5 5 5-5z"/>
+                    </svg>
+                </button>
+                <div id="movement-intensity" class="intensity-slider-container hidden">
+                    <label for="movement-intensity-slider">Intensity: <span class="intensity-value">1.0</span></label>
+                    <input type="range" id="movement-intensity-slider" class="intensity-slider" min="0" max="2" step="0.1" value="1">
+                </div>
             </div>
             <div class="setting-item">
-                <label for="jitter-toggle">Jitter</label>
-                <input type="checkbox" id="jitter-toggle" class="toggle-switch">
+                <div class="setting-header">
+                    <label for="jitter-toggle">Jitter</label>
+                    <input type="checkbox" id="jitter-toggle" class="toggle-switch">
+                </div>
+                <button class="dropdown-arrow" data-target="jitter-intensity">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M7 10l5 5 5-5z"/>
+                    </svg>
+                </button>
+                <div id="jitter-intensity" class="intensity-slider-container hidden">
+                    <label for="jitter-intensity-slider">Intensity: <span class="intensity-value">1.0</span></label>
+                    <input type="range" id="jitter-intensity-slider" class="intensity-slider" min="0" max="2" step="0.1" value="1">
+                </div>
             </div>
         </div>
         <script src="../dist/popup/popup.js" type="module" defer></script>

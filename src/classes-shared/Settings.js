@@ -78,6 +78,14 @@ export class GlobalSetting {
     static MOVEMENT_ENABLED = new Setting('MOVEMENT_ENABLED', false, false);
     static JITTER_ENABLED = new Setting('JITTER_ENABLED', false, false);
 
+    // Intensity settings for each feature
+    static SCALE_INTENSITY = new Setting('SCALE_INTENSITY', 1, false);
+    static VOLUME_INTENSITY = new Setting('VOLUME_INTENSITY', 1, false);
+    static SPEED_INTENSITY = new Setting('SPEED_INTENSITY', 1, false);
+    static GLOW_INTENSITY = new Setting('GLOW_INTENSITY', 1, false);
+    static MOVEMENT_INTENSITY = new Setting('MOVEMENT_INTENSITY', 1, false);
+    static JITTER_INTENSITY = new Setting('JITTER_INTENSITY', 1, false);
+
     static Get(keys){
         return new Promise((resolve, reject) => {
             chrome.storage.sync.get(keys)

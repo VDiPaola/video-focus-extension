@@ -25,14 +25,38 @@ const toggleMapping = {
     'jitter-toggle': GlobalSetting.JITTER_ENABLED
 };
 
+// Mapping of intensity slider IDs to their corresponding settings
+const intensityMapping = {
+    'scale-intensity-slider': GlobalSetting.SCALE_INTENSITY,
+    'volume-intensity-slider': GlobalSetting.VOLUME_INTENSITY,
+    'speed-intensity-slider': GlobalSetting.SPEED_INTENSITY,
+    'glow-intensity-slider': GlobalSetting.GLOW_INTENSITY,
+    'movement-intensity-slider': GlobalSetting.MOVEMENT_INTENSITY,
+    'jitter-intensity-slider': GlobalSetting.JITTER_INTENSITY
+};
+
 // Load current settings and update UI
 async function loadSettings() {
     try {
+        // Load toggle settings
         for (const [toggleId, setting] of Object.entries(toggleMapping)) {
             const toggle = document.getElementById(toggleId);
             if (toggle) {
                 const value = await setting.Get();
                 toggle.checked = value;
+            }
+        }
+        
+        // Load intensity settings
+        for (const [sliderId, setting] of Object.entries(intensityMapping)) {
+            const slider = document.getElementById(sliderId);
+            const valueDisplay = slider?.parentElement?.querySelector('.intensity-value');
+            if (slider) {
+                const value = await setting.Get();
+                slider.value = value;
+                if (valueDisplay) {
+                    valueDisplay.textContent = value.toFixed(1);
+                }
             }
         }
     } catch (error) {
@@ -52,6 +76,18 @@ async function saveSetting(toggleId, checked) {
     }
 }
 
+// Save intensity setting when slider changes
+async function saveIntensitySetting(sliderId, value) {
+    try {
+        const setting = intensityMapping[sliderId];
+        if (setting) {
+            setting.Set(parseFloat(value));
+        }
+    } catch (error) {
+        console.error('Error saving intensity setting:', error);
+    }
+}
+
 // Initialize popup
 async function initializePopup() {
     // Load current settings
@@ -66,6 +102,57 @@ async function initializePopup() {
             });
         }
     }
+
+    // Add event listeners to intensity sliders
+    for (const sliderId of Object.keys(intensityMapping)) {
+        const slider = document.getElementById(sliderId);
+        if (slider) {
+            slider.addEventListener('input', (event) => {
+                const value = parseFloat(event.target.value);
+                saveIntensitySetting(sliderId, value);
+                
+                // Update the displayed value
+                const valueDisplay = slider.parentElement.querySelector('.intensity-value');
+                if (valueDisplay) {
+                    valueDisplay.textContent = value.toFixed(1);
+                }
+            });
+        }
+    }
+    
+    // Add event listeners to dropdown arrows
+    const dropdownArrows = document.querySelectorAll('.dropdown-arrow');
+    dropdownArrows.forEach(arrow => {
+        arrow.addEventListener('click', () => {
+            const targetId = arrow.getAttribute('data-target');
+            const targetContainer = document.getElementById(targetId);
+            
+            if (targetContainer) {
+                const isHidden = targetContainer.classList.contains('hidden');
+                
+                // Close all other dropdowns first
+                dropdownArrows.forEach(otherArrow => {
+                    if (otherArrow !== arrow) {
+                        const otherTargetId = otherArrow.getAttribute('data-target');
+                        const otherTargetContainer = document.getElementById(otherTargetId);
+                        if (otherTargetContainer) {
+                            otherTargetContainer.classList.add('hidden');
+                            otherArrow.classList.remove('expanded');
+                        }
+                    }
+                });
+                
+                // Toggle the clicked dropdown
+                if (isHidden) {
+                    targetContainer.classList.remove('hidden');
+                    arrow.classList.add('expanded');
+                } else {
+                    targetContainer.classList.add('hidden');
+                    arrow.classList.remove('expanded');
+                }
+            }
+        });
+    });
     
     // Add event listeners to power buttons
     const powerGlobal = document.getElementById('power-global');

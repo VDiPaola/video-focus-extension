@@ -7,6 +7,7 @@ export class VideoScale{
     scaleFreq = 0.0015;
 
     enabled = false;
+    intensity = 1;
 
     videoElement
 
@@ -17,10 +18,22 @@ export class VideoScale{
         })
         .catch(err => {console.error(err)})
 
+        GlobalSetting.SCALE_INTENSITY.Get()
+        .then(intensity => {
+            this.intensity = intensity;
+        })
+        .catch(err => {console.error(err)})
+
         GlobalSetting.SCALE_ENABLED.addChangeListener((event)=>{
             if(this.enabled !== event.newValue){
                 this.enabled = event.newValue;
                 this.reset();
+            }
+        })
+
+        GlobalSetting.SCALE_INTENSITY.addChangeListener((event)=>{
+            if(this.intensity !== event.newValue){
+                this.intensity = event.newValue;
             }
         })
     }
@@ -30,8 +43,9 @@ export class VideoScale{
 
         this.videoElement = videoElement;
 
-        const scale = this.scaleBase + this.scaleAmp * Math.sin(Date.now() * this.scaleFreq);
-        TransformManager.setTransform(videoElement, 'scale', `scale(${scale})`);
+        const baseScale = this.scaleBase + this.scaleAmp * Math.sin(Date.now() * this.scaleFreq);
+        const adjustedScale = this.scaleBase + (baseScale - this.scaleBase) * this.intensity;
+        TransformManager.setTransform(videoElement, 'scale', `scale(${adjustedScale})`);
     }
 
     reset(){
