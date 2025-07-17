@@ -15,9 +15,7 @@
     },
 
     "permissions": [
-        "cookies",
         "storage",
-        "scripting",
         "activeTab"
     ],
 
