@@ -4,7 +4,8 @@
   "description": "",
   "scripts": {
     "build": "webpack --config ./webpack.config.js",
-    "publish": "powershell compress-archive -Force './dist', './popup', './manifest.json','./icon.png' Extension.zip"
+    "publish": "powershell compress-archive -Force './dist', './popup', './manifest.json','./icon.png' Extension.zip",
+    "publish:firefox": "7z a Extension.zip dist popup manifest.json icon.png"
   },
   "author": "",
   "license": "ISC",

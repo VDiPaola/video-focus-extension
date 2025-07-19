@@ -1,16 +1,16 @@
-## Development
+# Development
 
-# Download npm packages
+## Download npm packages
 ```
 npm i
 ```
 
-# Webpack build src files
+## Webpack build src files
 ```
 npm run build
 ```
 
-## Publishing
+# Publishing
 - run npm run build
 - set version in manifest.json
 - push to github

@@ -9,6 +9,13 @@
         "16": "icon.png"
     },
 
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "video-focus@enzonik.com"
+        }
+    },
+
+
     "action": {
         "default_popup": "popup/popup.html",
         "default_title": "Video Focus"
