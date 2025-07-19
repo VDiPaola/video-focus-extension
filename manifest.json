@@ -15,17 +15,13 @@
     },
 
     "permissions": [
-        "storage",
-        "activeTab"
+        "storage"
     ],
 
     "content_scripts": [{
         "matches": ["<all_urls>"],
         "js": ["./dist/content-scripts/main.js"],
         "run_at": "document_end"
-    },{
-        "css": ["./styles/main.css", "./styles/settings.css"],
-        "matches": ["<all_urls>"]
     }],
 
     "host_permissions": [
@@ -33,7 +29,7 @@
     ],
 
     "web_accessible_resources": [{
-        "resources": ["styles/*", "dist/*"],
+        "resources": ["dist/*"],
         "matches": ["<all_urls>"]
     }]
 }

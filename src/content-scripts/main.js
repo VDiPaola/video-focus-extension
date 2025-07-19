@@ -13,6 +13,7 @@ export class Extension{
     static animationFrameId;
     static lastFrameTime = 0;
     static targetFrameTime = 50; //ms - equivalent to the previous interval
+    static useTargetFrameTime = true;
 
     static featureList = new Set([
         new VideoScale(),
@@ -91,7 +92,7 @@ export class Extension{
 
     static _animate(currentTime = performance.now()) {
         // Check if enough time has passed since last frame (equivalent to interval)
-        if (currentTime - this.lastFrameTime >= this.targetFrameTime) {
+        if (this.useTargetFrameTime || currentTime - this.lastFrameTime >= this.targetFrameTime) {
             this.featureList.forEach((feature) => {
                 if(feature.enabled) feature.process(this.videoElement);
             });
